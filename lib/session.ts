@@ -15,20 +15,22 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   jwt:{
-      encode: ({secret, token}) =>{
-        const encodedToken = jsonwebtoken.sign({
+    encode: ({ secret, token }) => {
+      const encodedToken = jsonwebtoken.sign(
+        {
           ...token,
-          iss: 'grafbase',
-          exp: Math.floor(Date.now()/ 1000) + 60*60
-        }, secret)
-        return encodedToken;
-
-      },
-      decode: async ({secret, token}) => {
-        const decodedToken = jsonwebtoken.verify(token!, secret) as JWT;
-        return decodedToken;
-
-      }
+          iss: "grafbase",
+          exp: Math.floor(Date.now() / 1000) + 60 * 60,
+        },
+        secret
+      );
+      
+      return encodedToken;
+    },
+    decode: async ({ secret, token }) => {
+      const decodedToken = jsonwebtoken.verify(token!, secret);
+      return decodedToken as JWT;
+    },
   },
   theme: {
     colorScheme: "light",
@@ -48,7 +50,7 @@ export const authOptions: NextAuthOptions = {
         };
         return newSession;
       } catch (error) {
-        console.log("Error retriveing use data ", error)
+        console.log("Error retriving use data ", error)
         return session;
       }
      
@@ -58,19 +60,19 @@ export const authOptions: NextAuthOptions = {
         const userExists = (await getUser(user?.email as string)) as {
           user?: UserProfile;
         };
-        // get the user if they exist
         if (!userExists.user) {
           await createUser(
             user.name as string,
             user.email as string,
             user.image as string
           );
+
         }
 
-        // if they don't exist, create them
 
         return true;
       } catch (error: any) {
+        console.log("error singIn: ", error.message)
         return false;
       }
     },
