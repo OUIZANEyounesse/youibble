@@ -33,8 +33,7 @@ const jwt = auth.JWT({
 
 export default config({
   schema: g,
-  // Integrate Auth
-  // https://grafbase.com/docs/auth
+  // @ts-ignore
   auth: {
     providers: [jwt],
     rules: (rules) => {
